@@ -1,12 +1,17 @@
-const { type } = require('os');
 const path = require( 'path' );
+const TerserWebpackPlugin = require('terser-webpack-plugin');
+const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
+const { CleanWebpackPlugin }  = require( 'clean-webpack-plugin' );
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: './src/index.js',
     output: {
         path: path.resolve( __dirname, './dist' ), // expects absolute path, that is why used Node's path module
-        filename: 'bundle.js',
-        publicPath: 'dist/'
+        filename: 'bundle.[contenthash].js',
+        publicPath: '',
+        // clean: true // creates a new dist folder every time a build is,
+        // // supported in webpack > 5.20, no need to use CleanWebpackPlugin
     },
     mode: 'none',
     module: {
@@ -51,13 +56,13 @@ module.exports = {
                 // Loaders - which helps webapck use css, scss, handlers and other such files which JS is not able to use direcly
                 // - styel loader and css loader
                 test: /\.css$/,
-                use: [ 'style-loader', 'css-loader' ]
+                use: [ /*'style-loader' */ MiniCssExtractPlugin.loader , 'css-loader' ]
             },
             {
                 // Loaders - sass Loader
                 // Loaders load from right to left, so sass-loader will load first then css-loader then style-loader
                 test: /\.scss$/,
-                use: [ 'style-loader', 'css-loader', 'sass-loader' ]
+                use: [ /*'style-loader' */ MiniCssExtractPlugin.loader , 'css-loader', 'sass-loader' ]
             },
             {
                 test: /\.js$/,
@@ -69,7 +74,49 @@ module.exports = {
                         plugins: [ '@babel/plugin-proposal-class-properties' ] // ES6 class properties are not supported in old browsers
                     }
                 }
+            },
+            {
+                test: /\.hbs$/,
+                use: [ 'handlebars-loader' ]
             }
         ]
-    }
+    },
+    /**
+     * Plugins are the backbone of webpack. Webpack itself is built on the same plugin system
+     * that you use in your webpack configuration!
+     * They also serve the purpose of doing anything else that a loader cannot do.
+     * Webpack provides many such plugins out of the box.
+     */
+    plugins: [
+        // this plugin is used to minimise/compress the size of generated bundle.js file
+        new TerserWebpackPlugin(),// This one is provided by default in webapck versions > 5, no need to install this plugin
+
+        // style-loader - injects css into html style tag which makes the html file large and take time to load
+        new MiniCssExtractPlugin( { // create a new css file for all the css in the project
+            filename: 'style.[contenthash].css'
+        } ), 
+
+        new CleanWebpackPlugin( {
+            // Do not allow removal of current webpack assets
+            // default: true
+            protectWebpackAssets: false,
+
+            cleanOnceBeforeBuildPatterns: [
+                '**/*', // clears all with the folder defined at output.path
+                path.join( process.cwd(), '/build/**' ) // cleas the build folder along with nested folders
+            ]
+        } ),
+
+        /**
+         * The HtmlWebpackPlugin simplifies creation of HTML files to serve your webpack bundles.
+         * This is especially useful for webpack bundles that include a hash in the filename which changes every
+         * compilation. You can either let the plugin generate an HTML file for you, supply your own template
+         * using lodash templates, or use your own loader.
+         */
+        new HtmlWebpackPlugin( {
+            title: 'Hello Webpack',
+            // template: 'src/index.hbs',
+            description: 'Some Description'
+        } )
+    ]
 }
