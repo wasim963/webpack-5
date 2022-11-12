@@ -1,0 +1,13 @@
+.hello-world-button {
+    outline: none;
+    background: teal;
+    color: white;
+    padding: 4px 6px;
+    cursor: pointer;
+}
+
+.hello-world-text {
+    color: brown;
+    font-size: 20px;
+    font-style: italic;
+}

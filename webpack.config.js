@@ -11,6 +11,9 @@ module.exports = {
     mode: 'none',
     module: {
         rules: [
+            /**
+             * Assets - Images, svg, gif etc
+             */
             {
                 // Asset Type - resource - for large files like images
                 test: /\.(jpg|png|jpeg)$/,
@@ -38,6 +41,34 @@ module.exports = {
                 // Asset Type - Source // Converts Text in JS String that can be used as string
                 test: /\.txt/,
                 type: 'asset/source'
+            },
+            /**
+             * ---------- LOADERS ----------
+             * Webpack enables use of loaders to preprocess files.
+             * This allows you to bundle any static resource way beyond JavaScript
+             */
+            {
+                // Loaders - which helps webapck use css, scss, handlers and other such files which JS is not able to use direcly
+                // - styel loader and css loader
+                test: /\.css$/,
+                use: [ 'style-loader', 'css-loader' ]
+            },
+            {
+                // Loaders - sass Loader
+                // Loaders load from right to left, so sass-loader will load first then css-loader then style-loader
+                test: /\.scss$/,
+                use: [ 'style-loader', 'css-loader', 'sass-loader' ]
+            },
+            {
+                test: /\.js$/,
+                exclude: '/node_modules/',
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [ '@babel/env' ], // ES6 and ES7 and onwards are coverted to ES5 for old browsers
+                        plugins: [ '@babel/plugin-proposal-class-properties' ] // ES6 class properties are not supported in old browsers
+                    }
+                }
             }
         ]
     }
