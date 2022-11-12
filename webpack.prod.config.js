@@ -1,5 +1,5 @@
 const path = require( 'path' );
-const TerserWebpackPlugin = require('terser-webpack-plugin');
+// const TerserWebpackPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 const { CleanWebpackPlugin }  = require( 'clean-webpack-plugin' );
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -13,7 +13,7 @@ module.exports = {
         // clean: true // creates a new dist folder every time a build is,
         // // supported in webpack > 5.20, no need to use CleanWebpackPlugin
     },
-    mode: 'none',
+    mode: 'development',
     module: {
         rules: [
             /**
@@ -89,7 +89,8 @@ module.exports = {
      */
     plugins: [
         // this plugin is used to minimise/compress the size of generated bundle.js file
-        new TerserWebpackPlugin(),// This one is provided by default in webapck versions > 5, no need to install this plugin
+        // present by default in production, so no need to call this here in production mode
+        // new TerserWebpackPlugin(),// present by default in webapck versions > 5, no need to install this plugin
 
         // style-loader - injects css into html style tag which makes the html file large and take time to load
         new MiniCssExtractPlugin( { // create a new css file for all the css in the project
