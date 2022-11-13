@@ -5,15 +5,25 @@ const { CleanWebpackPlugin }  = require( 'clean-webpack-plugin' );
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: './src/index.js',
+    // entry: './src/index.js', // for SPAs
+    entry: { // for MPAs
+        'hello-world': './src/hello-world.js',
+        'kiwi':  './src/kiwi.js'
+    },
     output: {
         path: path.resolve( __dirname, './dist' ), // expects absolute path, that is why used Node's path module
-        filename: 'bundle.[contenthash].js',
+        filename: '[name].[contenthash].js',
         publicPath: '',
         // clean: true // creates a new dist folder every time a build is,
         // // supported in webpack > 5.20, no need to use CleanWebpackPlugin
     },
     mode: 'development',
+    optimization: {
+        splitChunks: {
+            chunks: 'all',
+            minSize: 30 * 1024
+        }
+    },
     module: {
         rules: [
             /**
@@ -94,7 +104,7 @@ module.exports = {
 
         // style-loader - injects css into html style tag which makes the html file large and take time to load
         new MiniCssExtractPlugin( { // create a new css file for all the css in the project
-            filename: 'style.[contenthash].css'
+            filename: '[name].[contenthash].css'
         } ), 
 
         new CleanWebpackPlugin( {
@@ -115,9 +125,21 @@ module.exports = {
          * using lodash templates, or use your own loader.
          */
         new HtmlWebpackPlugin( {
+            filename: 'hello-world.html',
             title: 'Hello Webpack',
+            chunks: [ 'hello-world' ], // decides which js and css file to inject in this html file
             // template: 'src/index.hbs',
-            description: 'Some Description'
+            description: 'Hello World Page',
+            minify: false, // By default true for prod
+        } ),
+        // need 2 HtmlWebpackPlugin instanciations for 2 diff html files
+        new HtmlWebpackPlugin( {
+            filename: 'kiwi.html',
+            title: 'Hello Webpack',
+            chunks: [ 'kiwi' ], // decides which js and css file to inject in this html file
+            // template: 'src/index.hbs',
+            description: 'Kiwi Image Page',
+            minify: false, // By default true for prod
         } )
     ]
 }

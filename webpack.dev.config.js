@@ -5,10 +5,14 @@ const { CleanWebpackPlugin }  = require( 'clean-webpack-plugin' );
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: './src/index.js',
+    // entry: './src/index.js', // for SPA
+    entry: { // Dev conf for DEV Mode
+        'hello-world': './src/hello-world.js',
+        'kiwi': './src/kiwi.js'
+    },
     output: {
         path: path.resolve( __dirname, './dist' ), // expects absolute path, that is why used Node's path module
-        filename: 'bundle.js',
+        filename: '[name].bundle.js',
         publicPath: '',
         // clean: true // creates a new dist folder every time a build is,
         // // supported in webpack > 5.20, no need to use CleanWebpackPlugin
@@ -126,9 +130,18 @@ module.exports = {
          * using lodash templates, or use your own loader.
          */
         new HtmlWebpackPlugin( {
-            title: 'Hello Webpack',
+            title: 'Hello World Webpack',
+            filename: 'hello-world.html',
+            chunks: ['hello-world'],
             // template: 'src/index.hbs',
-            description: 'Some Description'
+            description: 'Hello World Description'
+        } ),
+        new HtmlWebpackPlugin( {
+            title: 'Kiwi Webpack',
+            filename: 'kiwi.html',
+            chunks: ['kiwi'],
+            // template: 'src/index.hbs',
+            description: 'Kiwi Description'
         } )
     ]
 }
