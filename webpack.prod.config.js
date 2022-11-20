@@ -5,15 +5,16 @@ const { CleanWebpackPlugin }  = require( 'clean-webpack-plugin' );
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    // entry: './src/index.js', // for SPAs
-    entry: { // for MPAs
-        'hello-world': './src/hello-world.js',
-        'kiwi':  './src/kiwi.js'
-    },
+    entry: './src/index.js', // for SPAs
+    // entry: { // for MPAs
+    //     'hello-world': './src/hello-world.js',
+    //     'kiwi':  './src/kiwi.js'
+    // },
     output: {
         path: path.resolve( __dirname, './dist' ), // expects absolute path, that is why used Node's path module
-        filename: '[name].[contenthash].js',
-        publicPath: '',
+        // filename: '[name].[contenthash].js',
+        filename: 'bundle.[contenthash].js',
+        publicPath: '/static/',
         // clean: true // creates a new dist folder every time a build is,
         // // supported in webpack > 5.20, no need to use CleanWebpackPlugin
     },
@@ -104,7 +105,9 @@ module.exports = {
 
         // style-loader - injects css into html style tag which makes the html file large and take time to load
         new MiniCssExtractPlugin( { // create a new css file for all the css in the project
-            filename: '[name].[contenthash].css'
+            // filename: '[name].[contenthash].css' // this is for MPA
+            filename: 'bundle.[contenthash].css'
+
         } ), 
 
         new CleanWebpackPlugin( {
@@ -124,22 +127,31 @@ module.exports = {
          * compilation. You can either let the plugin generate an HTML file for you, supply your own template
          * using lodash templates, or use your own loader.
          */
-        new HtmlWebpackPlugin( {
-            filename: 'hello-world.html',
-            title: 'Hello Webpack',
-            chunks: [ 'hello-world' ], // decides which js and css file to inject in this html file
-            // template: 'src/index.hbs',
-            description: 'Hello World Page',
-            minify: false, // By default true for prod
-        } ),
         // need 2 HtmlWebpackPlugin instanciations for 2 diff html files
         new HtmlWebpackPlugin( {
-            filename: 'kiwi.html',
-            title: 'Hello Webpack',
-            chunks: [ 'kiwi' ], // decides which js and css file to inject in this html file
+            filename: 'index.html',
+            title: 'Webpack App',
+            // chunks: [ 'kiwi' ], // decides which js and css file to inject in this html file
             // template: 'src/index.hbs',
-            description: 'Kiwi Image Page',
+            // description: 'Kiwi Image Page',
             minify: false, // By default true for prod
-        } )
+        } ),
+        // new HtmlWebpackPlugin( {
+        //     filename: 'hello-world.html',
+        //     title: 'Hello Webpack',
+        //     chunks: [ 'hello-world' ], // decides which js and css file to inject in this html file
+        //     // template: 'src/index.hbs',
+        //     description: 'Hello World Page',
+        //     minify: false, // By default true for prod
+        // } ),
+        // // need 2 HtmlWebpackPlugin instanciations for 2 diff html files
+        // new HtmlWebpackPlugin( {
+        //     filename: 'kiwi.html',
+        //     title: 'Hello Webpack',
+        //     chunks: [ 'kiwi' ], // decides which js and css file to inject in this html file
+        //     // template: 'src/index.hbs',
+        //     description: 'Kiwi Image Page',
+        //     minify: false, // By default true for prod
+        // } )
     ]
 }
