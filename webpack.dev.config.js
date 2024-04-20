@@ -50,8 +50,8 @@ module.exports = {
                 test: /\.(jpg|jpeg|png)$/,
                 type: 'asset',
                 parser: {
-                    dataUrlCondition: { // condition which decides an asset is inline type or resorce type
-                        // if asset size <= 3KB then inline else resourec
+                    dataUrlCondition: { // condition which decides an asset is inline type or resource type
+                        // if asset size <= 3KB then inline else resource
                         maxSize: 3 * 1024 // 3 kilobytes
                     }
                 }
@@ -67,8 +67,8 @@ module.exports = {
              * This allows you to bundle any static resource way beyond JavaScript
              */
             {
-                // Loaders - which helps webapck use css, scss, handlers and other such files which JS is not able to use direcly
-                // - styel loader and css loader
+                // Loaders - which helps webpack use css, scss, handlers and other such files which JS is not able to use directly
+                // - style loader and css loader
                 test: /\.css$/,
                 use: [ 'style-loader' /* MiniCssExtractPlugin.loader */ , 'css-loader' ]
             },
@@ -84,7 +84,7 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: [ '@babel/env' ], // ES6 and ES7 and onwards are coverted to ES5 for old browsers
+                        presets: [ '@babel/env' ], // ES6 and ES7 and onwards are converted to ES5 for old browsers
                         plugins: [ '@babel/plugin-proposal-class-properties' ] // ES6 class properties are not supported in old browsers
                     }
                 }
@@ -102,15 +102,15 @@ module.exports = {
      * Webpack provides many such plugins out of the box.
      */
     plugins: [
-        // this plugin is used to minimise/compress the size of generated bundle.js file
+        // this plugin is used to minimize/compress the size of generated bundle.js file
         // present by default in production, so no need to call this here in production mode
-        // present by default in webapck versions > 5, no need to install this plugin
+        // present by default in webpack versions > 5, no need to install this plugin
         // new TerserWebpackPlugin(), // In dev mode, commenting this as we do not need to minimize css,
 
         // style-loader - injects css into html style tag which makes the html file large and take time to load
         // new MiniCssExtractPlugin( { // create a new css file for all the css in the project
         //     filename: 'style.[contenthash].css'
-        // } ), // In dev mode, no need to minimize css, as it takes time, and devloper experiemce is not good
+        // } ), // In dev mode, no need to minimize css, as it takes time, and developer experience is not good
 
         new CleanWebpackPlugin( {
             // Do not allow removal of current webpack assets
@@ -119,7 +119,7 @@ module.exports = {
 
             cleanOnceBeforeBuildPatterns: [
                 '**/*', // clears all with the folder defined at output.path
-                path.join( process.cwd(), '/build/**' ) // cleas the build folder along with nested folders
+                path.join( process.cwd(), '/build/**' ) // clears the build folder along with nested folders
             ]
         } ),
 
